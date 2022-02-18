@@ -11,7 +11,6 @@ const getPosts = () => {
             return response.json();
         })
         .then(function (response) {
-            console.log(response);
             response.forEach(post => {
                 if (post.state === 'published') {
                     const postDisplay = document.createElement('div');
@@ -45,7 +44,6 @@ const getPosts = () => {
                             commentDisplay.classList.add('comment');
 
                             response.forEach(comment => {
-                                console.log(comment.text);
                                 const commentAuthor = document.createElement('h3');
                                 commentAuthor.textContent = comment.name;
                                 const commentText = document.createElement('p');
