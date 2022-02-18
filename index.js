@@ -68,8 +68,6 @@ const getPosts = () => {
                         });
                     
                     const commentForm = document.createElement('form');
-                    commentForm.setAttribute('action', `https://calm-wave-71314.herokuapp.com/api/posts/${post._id}/comments`)
-                    commentForm.setAttribute('method', 'POST');
                     const commentFormCTA = document.createElement('h4');
                     commentFormCTA.textContent = 'Post a comment';
                     const commentLabelName = document.createElement('label');
@@ -85,7 +83,7 @@ const getPosts = () => {
                     commentInputText.setAttribute('name', 'text');
                     commentInputText.setAttribute('type', 'text');
                     const commentFormSubmit = document.createElement('input');
-                    commentFormSubmit.setAttribute('value', 'OK');
+                    commentFormSubmit.setAttribute('value', 'Send');
                     commentFormSubmit.setAttribute('type', 'submit');
                         
                     postDisplay.appendChild(commentForm);
@@ -95,6 +93,40 @@ const getPosts = () => {
                     commentForm.appendChild(commentLabelText);
                     commentForm.appendChild(commentInputText);
                     commentForm.appendChild(commentFormSubmit);
+
+                    //Use fetch to make an HTTP POST request to server
+                    const postComment = (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(commentForm);
+                       
+                        //turn form data to JSON
+                        const data = {};
+                        formData.forEach((entry, key) => {
+                            data[key] = entry
+                        });
+                        const dataJSON = JSON.stringify(data);
+                            
+                        
+                        fetch(`https://calm-wave-71314.herokuapp.com/api/posts/${post._id}/comments`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: dataJSON
+                        })
+                            .then(response => response.json())
+                            .then(result => {
+                                console.log('Success:', result);
+                                location.reload();
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    };
+
+                    commentForm.addEventListener('submit', postComment);
+
+                    
                 }
             });
            
